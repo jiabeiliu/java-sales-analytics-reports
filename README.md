@@ -4,6 +4,8 @@ A small Java CLI project that calculates sales and customer metrics over an in-m
 
 ## Demo
 
+[View the read-only demo page](https://jiabeiliu.github.io/java-sales-analytics-reports/) for the fixture, metric definitions, and recorded output. The page is a static showcase, not a browser-hosted Java runtime; the commands below execute the actual implementation.
+
 `ui.ReportingDemo` seeds seven fictional customer profiles (six purchasers), two fictional suppliers, and six transactions. Running it prints:
 
 ```text
