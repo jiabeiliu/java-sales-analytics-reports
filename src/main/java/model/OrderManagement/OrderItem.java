@@ -91,7 +91,7 @@ public class OrderItem {
     }
 
     public boolean isPickedSupplier(Supplier supplier) {
-        if (this.supplier.equals(supplier)) {
+        if (this.supplier != null && this.supplier == supplier) {
             return true;
         } else {
             return false;

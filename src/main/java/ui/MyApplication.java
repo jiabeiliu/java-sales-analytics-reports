@@ -69,7 +69,7 @@ public class MyApplication {
     System.out.println("================== Average spending per customer ================== ");
     // - Top 5 Sales Score (Total sales to top 5 Customers divided by total sales)
     System.out.println("================== Top 5 Sales Score ================== ");
-      business.getTop5SalesScore();
+      System.out.printf("%.4f%n", business.getTop5SalesScore());
     System.out.println("================== Top 5 Sales Score ================== ");
 
 

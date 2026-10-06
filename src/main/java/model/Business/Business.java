@@ -5,9 +5,8 @@
  */
 package model.Business;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import model.CustomerManagement.ChannelCatalog;
@@ -131,6 +130,7 @@ public class Business {
          */
         List<CustomerProfile> customerList = customerdirectory.getCustomerList();
         int totalCustomer = customerList.size();
+        if (supplier == null || totalCustomer == 0) return 0.0;
         int totalCustomerPickedSupplier = 0;
         for (CustomerProfile customerProfile : customerList) {
             if (customerProfile.isPickedSupplier(supplier)) {
@@ -146,28 +146,24 @@ public class Business {
          * by number of different customers)
          */
         List<CustomerProfile> customerList = customerdirectory.getCustomerList();
-        int totalCustomer = customerList.size();
+        long purchasingCustomers = customerList.stream().filter(customer -> customer.getTotalSales() > 0).count();
+        if (purchasingCustomers == 0) return 0.0;
         int totalSales = masterorderlist.getSalesVolume();
-        return (double) totalSales / totalCustomer;
+        return (double) totalSales / purchasingCustomers;
 
     }
 
-    public void getTop5SalesScore() {
+    public Double getTop5SalesScore() {
         /**
          * - Top 5 Sales Score (Total sales to top 5 Customers
          * divided by total sales)
          */
         int totalSales = masterorderlist.getSalesVolume();
-        BigDecimal total = new BigDecimal(totalSales);
-        List<CustomerProfile> customerList = customerdirectory.getCustomerList();
-        customerList.sort((o1, o2) -> o2.getTotalSales() - o1.getTotalSales());
-        for (int i = 0; i < 5; i++) {
-            CustomerProfile customerProfile = customerList.get(i);
-            BigDecimal cus = new BigDecimal(customerProfile.getTotalSales());
-            // 保留6位小数
-            DecimalFormat df = new DecimalFormat("0.000000");
-            System.out.println(customerProfile.getCustomerId() + ":" + df.format(cus.divide(total, 6, BigDecimal.ROUND_HALF_UP)));
-        }
-
+        if (totalSales == 0) return 0.0;
+        return customerdirectory.getCustomerList().stream()
+                .sorted(Comparator.comparingInt(CustomerProfile::getTotalSales).reversed())
+                .limit(5)
+                .mapToInt(CustomerProfile::getTotalSales)
+                .sum() / (double) totalSales;
     }
 }
